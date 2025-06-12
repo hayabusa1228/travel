@@ -3,101 +3,147 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Book Flip</title>
-  <!-- jQuery（クリックイベント用） -->
+  <title>3D Travel Itinerary Book</title>
+  <!-- Google Fonts: Patrick Hand for handwritten style -->
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <!-- jQuery for click events -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    /* 全体リセット＆背景 */
+    /* Reset & warm desk background */
     html, body {
       margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: #000;
+      width: 100%; height: 100%; overflow: hidden;
+      background: url('desk-background.jpg') center center / cover no-repeat;
+      font-family: 'Patrick Hand', cursive;
     }
-    /* 視点（パースペクティブ）設定 */
+    /* Container */
     .scene {
-      width: 480px; height: 640px;
-      margin: 40px auto;
-      perspective: 2000px;
+      position: absolute; top: 50%; left: 50%;
+      width: 80vw; height: 60vh; max-width: 800px; max-height: 600px;
+      transform: translate(-50%, -50%) rotateX(15deg);
+      perspective: 2000px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    /* 本全体 */
-    .book {
-      position: relative;
-      width: 100%; height: 100%;
-      transform-style: preserve-3d;
-    }
-    /* 各ページ */
+    .book { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
     .page {
-      position: absolute;
-      width: 100%; height: 100%;
-      transform-origin: left center;
-      transform-style: preserve-3d;
-      transition: transform 1.5s;
-      cursor: pointer;
+      position: absolute; width: 100%; height: 100%;
+      transform-origin: left center; transform-style: preserve-3d;
+      transition: transform 1.5s; cursor: pointer;
     }
-    /* 表裏 */
+    /* Page background white with light gray border */
     .front, .back {
-      position: absolute;
-      width: 100%; height: 100%;
+      position: absolute; width: 100%; height: 100%;
       backface-visibility: hidden;
-      background: linear-gradient(to bottom right, #fff, #ccc);
+      background: #f9f6ef;
+      border: 8px solid #dddddd;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+      border-radius: 4px; box-sizing: border-box;
+      display: flex; flex-direction: column; padding: 20px;
     }
-    .back {
-      transform: rotateY(180deg);
-    }
-    /* 状態管理 */
-    .page.active  { z-index: 1; }
+    .back { transform: rotateY(180deg); }
+    .page.active { z-index: 1; }
     .page.flipped { transform: rotateY(-180deg); }
     .page.flipped:last-of-type { z-index: 1; }
-    /* ページ内画像 */
-    .page img {
+
+    /* Cover styles */
+    .cover-title { font-size: 2rem; text-align: center; margin-bottom: 20px; }
+    .cover-img { max-width: 60%; height: auto; border-radius: 4px; margin: auto; }
+
+    /* Schedule page styles */
+    .schedule-front {
       width: 100%; height: 100%;
+      position: relative; display: flex; padding: 30px;
+    }
+    .schedule-left { flex: 1; }
+    .schedule-right {
+      flex: 1; display: flex; justify-content: center; align-items: center;
+      overflow: hidden; /* 画像のはみ出し防止 */
+      position: relative;
+    }
+    .schedule-right img {
+      transform: scale(0.38);       /* 全体を80%に縮小 */
+      transform-origin: center center;
+      width: auto;                  /* 自動調整 */
+      height: auto;                 /* 自動調整 */
       object-fit: cover;
-      display: block;
+      border-radius: 0;             /* 角をなくしてふくらみ解消 */
+      box-shadow: none;             /* ボックスシャドウを削除 */
+    }
+    .day-title { font-size: 1.3rem; margin-bottom: 10px; }
+    .date { font-size: 1rem; margin-bottom: 20px; }
+    .time-list { list-style: none; padding: 0; margin: 0; }
+    .time-list li { margin-bottom: 15px; display: flex; align-items: center; }
+    .time-list .time { width: 60px; }
+    .time-list .event { flex: 1; }
+    .time-list .line-memo {
+      margin-left: 10px; border: none; border-bottom: 1px dashed #ccc;
+      background: transparent; width: 120px; font-family: inherit;
+      font-size: 0.9rem; outline: none;
+    }
+    .thumb { width: 100px; height: 100px; object-fit: cover;
+      border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .memo { position: absolute; bottom: 20px; left: 30px;
+      width: calc(100% - 60px); border: 1px dashed #ccc; padding: 10px;
+      border-radius: 4px; font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <div class="scene">
     <div class="book">
-      <!-- ページ1 -->
+      <!-- 表紙 -->
       <div class="page active">
-        <div class="front"><img src="https://placeimg.com/480/640/arch?1" alt="Page 1 front"></div>
-        <div class="back" ><img src="https://placeimg.com/480/640/arch?2" alt="Page 1 back" ></div>
+        <div class="front">
+          <div class="cover-title">鎌倉旅行<br>~旅のしおり~</div>
+          <img class="cover-img" src="title_image.png" alt="鎌倉イラスト">
+        </div>
+        <div class="back"></div>
       </div>
-      <!-- ページ2 -->
+      <!-- タイムスケジュール -->
       <div class="page">
-        <div class="front"><img src="https://placeimg.com/480/640/arch?3" alt="Page 2 front"></div>
-        <div class="back" ><img src="https://placeimg.com/480/640/arch?4" alt="Page 2 back" ></div>
+        <div class="front">
+          <div class="schedule-left">
+            <div class="day-title">★タイムスケジュール★</div>
+            <div class="date">2025/06/21</div>
+            <ul class="time-list">
+              <li><span class="time">10:00</span><span class="event">新宿駅集合</span></li>
+              <li><span class="time">12:00</span><span class="event">小町通り食べ歩き</span></li>
+              <li><span class="time">14:00</span><span class="event">長谷寺</span></li>
+              <li><span class="time">15:30</span><span class="event">江の島観光</span></li>
+              <li><span class="time">18:00</span><span class="event">解散</span></li>
+            </ul>
+          </div>
+          <div class="schedule-right">
+            <img src="ajisai.png" alt="鎌倉の風景1">
+          </div>
+        </div>
+        <div class="back"></div>
       </div>
-      <!-- ページを増やしたい場合は以下をコピー -->
-      <!--
+      <!-- 小町通 -->
       <div class="page">
-        <div class="front"><img src="..."></div>
-        <div class="back" ><img src="..."></div>
+        <div class="front">
+        </div>
+        <div class="back"></div>
       </div>
-      -->
+      <!-- 長谷寺 -->
+      <div class="page">
+        <div class="front">
+        </div>
+        <div class="back"></div>
+      </div>
+      <!-- 江の島 -->
+      <div class="page">
+        <div class="front">
+        </div>
+        <div class="back"></div>
+      </div>
+      
     </div>
   </div>
   <script>
-    // 次のページをめくる
-    function nextPage() {
-      var $active = $('.page.active');
-      $active.removeClass('active').addClass('flipped');
-      $active.next('.page').addClass('active');
-    }
-    // 前のページを戻す
-    function prevPage() {
-      var $last = $('.page.flipped').last();
-      $last.removeClass('flipped').addClass('active')
-           .siblings('.page').removeClass('active');
-    }
-    // クリックでページめくり
-    $(function(){
-      $('.book')
-        .on('click', '.active',  nextPage)   // 表（active）クリックで forward
-        .on('click', '.flipped', prevPage);  // 裏（flipped）クリックで back
-    });
+    function nextPage() { var $a=$('.page.active'),$n=$a.next('.page'); if(!$n.length)return; $a.removeClass('active').addClass('flipped'); $n.addClass('active'); }
+    function prevPage() { var $l=$('.page.flipped').last(); if(!$l.length)return; $l.removeClass('flipped').addClass('active').siblings('.page').removeClass('active'); }
+    $(function(){ $('.book').on('click','.active',nextPage).on('click','.flipped',prevPage); });
   </script>
 </body>
 </html>
