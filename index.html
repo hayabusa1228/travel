@@ -65,8 +65,15 @@
     .komachi-title { font-size: 1.6rem; margin-bottom: 15px; text-align: center; }
     .komachi-content { display: flex; align-items: flex-start; margin-bottom: 15px; }
     .komachi-thumb { width: 120px; height: auto; object-fit: cover; border-radius: 8px; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-    .komachi-text h3 { font-size: 1.2rem; margin: 0 0 5px; }
-    .komachi-text p { font-size: 0.9rem; margin: 0; line-height: 1.4; }
+    .komachi-text { display: flex; flex-direction: column; /* ensure wrapping */ }
+    .komachi-text h3, .komachi-text p {
+      /* responsive font sizing to prevent overflow */
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+      margin: 0;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .komachi-text h3 { margin-bottom: 5px; }
   </style>
 </head>
 <body>
@@ -104,14 +111,14 @@
           <div class="komachi-content">
             <img class="komachi-thumb" src="daibutuyaki.jpg" alt="ともやの大仏さま焼き">
             <div class="komachi-text">
-              <h3>「ともや」の大仏さま焼き</h3>
+              <p><b>ともやの大仏さま焼き</b></p>
               <p>鎌倉の名物。外はカリッと、中はふわっとした食感が楽しめます。</p>
             </div>
           </div>
           <div class="komachi-content">
             <img class="komachi-thumb" src="kurepu.jpg" alt="コクリコのクレープ">
             <div class="komachi-text">
-              <h3>「コクリコ」のクレープ</h3>
+              <p><b>コクリコのクレープ</b></p>
               <p>パリッとした食感でありつつ、ふわっとした軽さをもつ生地は唯一無二です。</p>
             </div>
           </div>
@@ -125,14 +132,14 @@
           <div class="komachi-content">
             <img class="komachi-thumb" src="waffule.jpg" alt="豊島屋 瀬戸小路のワッフル">
             <div class="komachi-text">
-              <h3>「豊島屋」のワッフル</h3>
+              <p><b>豊島屋のワッフル</b></p>
               <p>やさしい塩味とコクが特徴の鳩サブレバターと、ミルキーな生クリームが生地と相性抜群です。</p>
             </div>
           </div>
           <div class="komachi-content">
             <img class="komachi-thumb" src="karepan.jpg" alt="Giraffaのカレーパン">
             <div class="komachi-text">
-              <h3>「Giraffa」のカレーパン</h3>
+              <p><b>Giraffaのカレーパン</b></p>
               <p>絶妙なカリカリ食感と、みょーんとのびるチーズが特徴。1日に最高2100個販売。</p>
             </div>
           </div>
