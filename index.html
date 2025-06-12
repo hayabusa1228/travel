@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Book Flip</title>
+  <!-- jQuery（クリックイベント用） -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* 全体リセット＆背景 */
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+    /* 視点（パースペクティブ）設定 */
+    .scene {
+      width: 480px; height: 640px;
+      margin: 40px auto;
+      perspective: 2000px;
+    }
+    /* 本全体 */
+    .book {
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+    }
+    /* 各ページ */
+    .page {
+      position: absolute;
+      width: 100%; height: 100%;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      transition: transform 1.5s;
+      cursor: pointer;
+    }
+    /* 表裏 */
+    .front, .back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+      background: linear-gradient(to bottom right, #fff, #ccc);
+    }
+    .back {
+      transform: rotateY(180deg);
+    }
+    /* 状態管理 */
+    .page.active  { z-index: 1; }
+    .page.flipped { transform: rotateY(-180deg); }
+    .page.flipped:last-of-type { z-index: 1; }
+    /* ページ内画像 */
+    .page img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="book">
+      <!-- ページ1 -->
+      <div class="page active">
+        <div class="front"><img src="https://placeimg.com/480/640/arch?1" alt="Page 1 front"></div>
+        <div class="back" ><img src="https://placeimg.com/480/640/arch?2" alt="Page 1 back" ></div>
+      </div>
+      <!-- ページ2 -->
+      <div class="page">
+        <div class="front"><img src="https://placeimg.com/480/640/arch?3" alt="Page 2 front"></div>
+        <div class="back" ><img src="https://placeimg.com/480/640/arch?4" alt="Page 2 back" ></div>
+      </div>
+      <!-- ページを増やしたい場合は以下をコピー -->
+      <!--
+      <div class="page">
+        <div class="front"><img src="..."></div>
+        <div class="back" ><img src="..."></div>
+      </div>
+      -->
+    </div>
+  </div>
+  <script>
+    // 次のページをめくる
+    function nextPage() {
+      var $active = $('.page.active');
+      $active.removeClass('active').addClass('flipped');
+      $active.next('.page').addClass('active');
+    }
+    // 前のページを戻す
+    function prevPage() {
+      var $last = $('.page.flipped').last();
+      $last.removeClass('flipped').addClass('active')
+           .siblings('.page').removeClass('active');
+    }
+    // クリックでページめくり
+    $(function(){
+      $('.book')
+        .on('click', '.active',  nextPage)   // 表（active）クリックで forward
+        .on('click', '.flipped', prevPage);  // 裏（flipped）クリックで back
+    });
+  </script>
+</body>
+</html>
