@@ -16,7 +16,6 @@
       background: url('desk-background.jpg') center center / cover no-repeat;
       font-family: 'Patrick Hand', cursive;
     }
-    /* Container */
     .scene {
       position: absolute; top: 50%; left: 50%;
       width: 80vw; height: 60vh; max-width: 800px; max-height: 600px;
@@ -29,7 +28,6 @@
       transform-origin: left center; transform-style: preserve-3d;
       transition: transform 1.5s; cursor: pointer;
     }
-    /* Page background white with light gray border */
     .front, .back {
       position: absolute; width: 100%; height: 100%;
       backface-visibility: hidden;
@@ -44,48 +42,22 @@
     .page.flipped { transform: rotateY(-180deg); }
     .page.flipped:last-of-type { z-index: 1; }
 
-    /* Cover styles */
+    /* Cover styles (restored) */
     .cover-title { font-size: 2rem; text-align: center; margin-bottom: 20px; }
     .cover-img { max-width: 60%; height: auto; border-radius: 4px; margin: auto; }
 
     /* Schedule page styles */
-    .schedule-front {
-      width: 100%; height: 100%;
-      position: relative; display: flex; padding: 30px;
-    }
     .schedule-left { flex: 1; }
-    .schedule-right {
-      flex: 1; display: flex; justify-content: center; align-items: center;
-      overflow: hidden; /* 画像のはみ出し防止 */
-      position: relative;
-    }
-    .schedule-right img {
-      transform: scale(0.38);       /* 全体を80%に縮小 */
-      transform-origin: center center;
-      width: auto;                  /* 自動調整 */
-      height: auto;                 /* 自動調整 */
-      object-fit: cover;
-      border-radius: 0;             /* 角をなくしてふくらみ解消 */
-      box-shadow: none;             /* ボックスシャドウを削除 */
-    }
     .day-title { font-size: 1.3rem; margin-bottom: 10px; }
     .date { font-size: 1rem; margin-bottom: 20px; }
-    .time-list { list-style: none; padding: 0; margin: 0; }
-    .time-list li { margin-bottom: 15px; display: flex; align-items: center; }
-    .time-list .time { width: 60px; }
-    .time-list .event { flex: 1; }
-    .time-list .line-memo {
-      margin-left: 10px; border: none; border-bottom: 1px dashed #ccc;
-      background: transparent; width: 120px; font-family: inherit;
-      font-size: 0.9rem; outline: none;
-    }
-    .thumb { width: 100px; height: 100px; object-fit: cover;
-      border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .memo { position: absolute; bottom: 20px; left: 30px;
-      width: calc(100% - 60px); border: 1px dashed #ccc; padding: 10px;
-      border-radius: 4px; font-size: 0.9rem;
-    }
+
+    /* Komachi-dori page specific */
+    .komachi-front { display: flex; flex-direction: column; justify-content: flex-start; }
+    .komachi-title { font-size: 1.6rem; margin-bottom: 15px; text-align: center; }
+    .komachi-content { display: flex; align-items: flex-start; }
+    .komachi-thumb { width: 120px; height: auto; object-fit: cover; border-radius: 8px; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .komachi-text h3 { font-size: 1.2rem; margin: 0 0 5px; }
+    .komachi-text p { font-size: 0.9rem; margin: 0; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -101,7 +73,7 @@
       </div>
       <!-- タイムスケジュール -->
       <div class="page">
-        <div class="front">
+        <div class="front schedule-front">
           <div class="schedule-left">
             <div class="day-title">★タイムスケジュール★</div>
             <div class="date">2025/06/21</div>
@@ -116,25 +88,57 @@
         </div>
         <div class="back"></div>
       </div>
-      <!-- 小町通 -->
+      <!-- 小町通り -->
       <div class="page">
-        <div class="front">
+        <div class="front komachi-front">
+          <div class="komachi-title">小町通り食べ歩き</div>
+          <div class="komachi-content">
+            <img class="komachi-thumb" src="daibutuyaki.jpg" alt="ともやの大仏さま焼き">
+            <div class="komachi-text">
+              <h3>「ともや」の大仏さま焼き</h3>
+              <p>鎌倉の名物。外はカリッと、中はふわっとした食感が楽しめます。</p>
+            </div>
+          </div>
+          <div class="komachi-content">
+            <img class="komachi-thumb" src="kurepu.jpg" alt="コクリコのクレープ">
+            <div class="komachi-text">
+              <h3>「コクリコ」のクレープ</h3>
+              <p>クラシカルなおいしさ。パリッとした食感でありつつ、ふわっとした軽さをもつ生地は唯一無二です。</p>
+            </div>
+          </div>
+        </div>
+        <div class="back"></div>
+      </div>
+      <div class="page">
+        <div class="front komachi-front">
+          <div class="komachi-title">小町通り食べ歩き</div>
+          <div class="komachi-content">
+            <img class="komachi-thumb" src="waffule.jpg" alt="豊島屋 瀬戸小路のワッフル">
+            <div class="komachi-text">
+              <h3>「豊島屋 瀬戸小路」のワッフル</h3>
+              <p>やさしい塩味とコクが特徴の鳩サブレバターと、ミルキーな生クリームが生地と相性抜群です。</p>
+            </div>
+          </div>
+          <div class="komachi-content">
+            <img class="komachi-thumb" src="karepan.jpg" alt="Giraffaのカレーパン">
+            <div class="komachi-text">
+              <h3>「Giraffa」のカレーパン</h3>
+              <p>絶妙なカリカリ食感と、みょーんとのびるチーズが特徴で、1日に最高2100個販売。</p>
+            </div>
+          </div>
         </div>
         <div class="back"></div>
       </div>
       <!-- 長谷寺 -->
       <div class="page">
-        <div class="front">
-        </div>
+        <div class="front"></div>
         <div class="back"></div>
       </div>
       <!-- 江の島 -->
       <div class="page">
-        <div class="front">
-        </div>
+        <div class="front"></div>
         <div class="back"></div>
       </div>
-      
     </div>
   </div>
   <script>
