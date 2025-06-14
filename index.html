@@ -236,7 +236,15 @@
   </div>
   <script>
     function nextPage() { var $a=$('.page.active'),$n=$a.next('.page'); if(!$n.length)return; $a.removeClass('active').addClass('flipped'); $n.addClass('active'); }
-    function prevPage() { var $l=$('.page.flipped').last(); if(!$l.length)return; $l.removeClass('flipped').addClass('active').siblings('.page').removeClass('active'); }
+    function prevPage() {
+        var $lastFlipped = $('.page.flipped').last();
+        if (!$lastFlipped.length) return;
+        $lastFlipped.removeClass('flipped').addClass('active');
+        // 1秒待って他のページからactiveを外す
+        setTimeout(function() {
+          $lastFlipped.siblings('.page').removeClass('active');
+        }, 1000);
+    }
     $(function(){ $('.book').on('click','.active',nextPage).on('click','.flipped',prevPage); });
   </script>
 </body>
